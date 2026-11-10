@@ -1,0 +1,10 @@
+name: probe
+'on':
+  workflow_dispatch: null
+  push: null
+jobs:
+  p:
+    runs-on: macos-latest
+    timeout-minutes: 3
+    steps:
+    - run: echo hello && sleep 60 && echo done
