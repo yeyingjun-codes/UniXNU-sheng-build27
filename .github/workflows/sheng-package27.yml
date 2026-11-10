@@ -42,6 +42,10 @@ jobs:
 
     steps:
 
+    - name: Checkout this mirror (probe sources)
+      uses: actions/checkout@v4
+      with:
+        persist-credentials: false
     - name: Runner info and disk headroom
 
       run: "set -euo pipefail\nsw_vers; uname -m\ndf -h / | tail -2\n# Pick the newest Xcode installed on the image.\nnewest=$(ls -d /Applications/Xcode*.app 2>/dev/null | sort -V | tail -1 || true)\necho \"xcode candidates:\"; ls -d /Applications/Xcode*.app 2>/dev/null || true\nif [ -n \"$newest\" ]; then\n  echo \"selecting $newest\"\n  sudo xcode-select -s \"$newest/Contents/Developer\" || true\nfi\nxcodebuild -version || true\nxcrun --sdk iphoneos --show-sdk-version || true\n# Remove things this build does not need to keep the disk free.\nsudo rm -rf /Library/Developer/CoreSimulator/Caches/* 2>/dev/null || true\nsudo rm -rf \"$HOME/Library/Developer/Xcode/iOS DeviceSupport\"/* 2>/dev/null || true\ndf -h / | tail -2\n"
